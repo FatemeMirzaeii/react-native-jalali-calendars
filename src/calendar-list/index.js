@@ -97,7 +97,9 @@ class CalendarList extends Component {
       const rangeDate = date
         .clone()
         .addMonths(i - this.props.pastScrollRange, true);
-      const rangeDateStr = rangeDate.toString('MMM yyyy');
+      const rangeDateStr = this.props.jalali
+        ? dateutils.pFormat(rangeDate, 'jMMMM jYYYY')
+        : rangeDate.toString('MMM yyyy');
       texts.push(rangeDateStr);
       /*
        * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
@@ -135,9 +137,17 @@ class CalendarList extends Component {
 
   scrollToDay(d, offset, animated) {
     const day = parseDate(d);
-    const diffMonths = Math.round(
-      this.state.openDate.clone().setDate(1).diffMonths(day.clone().setDate(1)),
-    );
+    let diffMonths = 0;
+    if (this.props.jalali) {
+      diffMonths = dateutils.pDiffMonths(this.state.openDate, day);
+    } else {
+      diffMonths = Math.round(
+        this.state.openDate
+          .clone()
+          .setDate(1)
+          .diffMonths(day.clone().setDate(1)),
+      );
+    }
     const size = this.props.horizontal
       ? this.props.calendarWidth
       : this.props.calendarHeight;
@@ -146,7 +156,7 @@ class CalendarList extends Component {
 
     if (!this.props.horizontal) {
       let week = 0;
-      const days = dateutils.page(day, this.props.firstDay);
+      const days = dateutils.page(day, this.props.firstDay, this.props.jalali);
       for (let i = 0; i < days.length; i++) {
         week = Math.floor(i / 7);
         if (dateutils.sameDate(days[i], day)) {
@@ -243,6 +253,7 @@ class CalendarList extends Component {
   renderCalendar({item}) {
     return (
       <CalendarListItem
+        jalali={this.props.jalali}
         testID={`${this.props.testID}_${item}`}
         scrollToMonth={this.scrollToMonth.bind(this)}
         item={item}
