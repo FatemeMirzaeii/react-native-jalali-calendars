@@ -1,16 +1,31 @@
 const XDate = require('xdate');
-
-function sameMonth(a, b) {
-  return a instanceof XDate && b instanceof XDate &&
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth();
-}
+const PersianDateUtils = require('./persian/dateutils');
+const {
+  pFormat,
+  pDateDay,
+  pSetLocale,
+  pDiffMonths,
+  sameMonth,
+  month,
+} = PersianDateUtils;
+pSetLocale();
+// function sameMonth(a, b) {
+//   return (
+//     a instanceof XDate &&
+//     b instanceof XDate &&
+//     a.getFullYear() === b.getFullYear() &&
+//     a.getMonth() === b.getMonth()
+//   );
+// }
 
 function sameDate(a, b) {
-  return a instanceof XDate && b instanceof XDate &&
+  return (
+    a instanceof XDate &&
+    b instanceof XDate &&
     a.getFullYear() === b.getFullYear() &&
     a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate();
+    a.getDate() === b.getDate()
+  );
 }
 
 function isGTE(a, b) {
@@ -23,37 +38,42 @@ function isLTE(a, b) {
 
 function fromTo(a, b) {
   const days = [];
-  let from = +a, to = +b;
+  let from = +a,
+    to = +b;
   for (; from <= to; from = new XDate(from, true).addDays(1).getTime()) {
     days.push(new XDate(from, true));
   }
   return days;
 }
 
-function month(xd) {
-  const year = xd.getFullYear(), month = xd.getMonth();
-  const days = new Date(year, month + 1, 0).getDate();
+// function month(xd) {
+//   const year = xd.getFullYear(),
+//     month = xd.getMonth();
+//   const days = new Date(year, month + 1, 0).getDate();
 
-  const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
-  const lastDay = new XDate(year, month, days, 0, 0, 0, true);
+//   const firstDay = new XDate(year, month, 1, 0, 0, 0, true);
+//   const lastDay = new XDate(year, month, days, 0, 0, 0, true);
 
-  return fromTo(firstDay, lastDay);
-}
+//   return fromTo(firstDay, lastDay);
+// }
 
 function weekDayNames(firstDayOfWeek = 0) {
   let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
   const dayShift = firstDayOfWeek % 7;
   if (dayShift) {
-    weekDaysNames = weekDaysNames.slice(dayShift).concat(weekDaysNames.slice(0, dayShift));
+    weekDaysNames = weekDaysNames
+      .slice(dayShift)
+      .concat(weekDaysNames.slice(0, dayShift));
   }
   return weekDaysNames;
 }
 
-function page(xd, firstDayOfWeek, showSixWeeks) {
-  const days = month(xd);
-  let before = [], after = [];
+function page(xd, firstDayOfWeek, showSixWeeks, jalali = false) {
+  const days = month(xd, jalali);
+  let before = [],
+    after = [];
 
-  const fdow = ((7 + firstDayOfWeek) % 7) || 7;
+  const fdow = (7 + firstDayOfWeek) % 7 || 7;
   const ldow = (fdow + 6) % 7;
 
   firstDayOfWeek = firstDayOfWeek || 0;
@@ -71,7 +91,7 @@ function page(xd, firstDayOfWeek, showSixWeeks) {
     to.addDays((ldow + 7 - day) % 7);
   }
 
-  const daysForSixWeeks = (((daysBefore + days.length) / 6) >= 6);
+  const daysForSixWeeks = (daysBefore + days.length) / 6 >= 6;
 
   if (showSixWeeks && !daysForSixWeeks) {
     to.addDays(7);
@@ -96,5 +116,8 @@ module.exports = {
   page,
   fromTo,
   isLTE,
-  isGTE
+  isGTE,
+  pDiffMonths,
+  pFormat,
+  pDateDay,
 };
