@@ -16,6 +16,7 @@ export default class AgendaScreen extends Component {
   render() {
     return (
       <Agenda
+        jalali={true}
         testID={testIDs.agenda.CONTAINER}
         items={this.state.items}
         loadItemsForMonth={this.loadItems.bind(this)}

@@ -7,11 +7,11 @@ import XDate from 'xdate';
 import dateutils from '../../dateutils';
 import styleConstructor from './style';
 
-
 class ReservationList extends Component {
   static displayName = 'IGNORE';
 
   static propTypes = {
+    jalali: PropTypes.bool,
     // specify your item comparison function for increased performance
     rowHasChanged: PropTypes.func,
     // specify how each item should be rendered in agenda
@@ -36,7 +36,7 @@ class ReservationList extends Component {
     onScrollBeginDrag: PropTypes.func,
     onScrollEndDrag: PropTypes.func,
     onMomentumScrollBegin: PropTypes.func,
-    onMomentumScrollEnd: PropTypes.func
+    onMomentumScrollEnd: PropTypes.func,
   };
 
   constructor(props) {
@@ -45,10 +45,10 @@ class ReservationList extends Component {
     this.styles = styleConstructor(props.theme);
 
     this.state = {
-      reservations: []
+      reservations: [],
     };
 
-    this.heights=[];
+    this.heights = [];
     this.selectedDay = this.props.selectedDay;
     this.scrollOver = true;
   }
@@ -59,7 +59,7 @@ class ReservationList extends Component {
 
   updateDataSource(reservations) {
     this.setState({
-      reservations
+      reservations,
     });
   }
 
@@ -79,11 +79,14 @@ class ReservationList extends Component {
 
   UNSAFE_componentWillReceiveProps(props) {
     if (!dateutils.sameDate(props.topDay, this.props.topDay)) {
-      this.setState({
-        reservations: []
-      }, () => {
-        this.updateReservations(props);
-      });
+      this.setState(
+        {
+          reservations: [],
+        },
+        () => {
+          this.updateReservations(props);
+        },
+      );
     } else {
       this.updateReservations(props);
     }
@@ -118,6 +121,7 @@ class ReservationList extends Component {
     return (
       <View onLayout={this.onRowLayoutChange.bind(this, index)}>
         <Reservation
+          jalali={this.props.jalali}
           item={item}
           renderItem={this.props.renderItem}
           renderDay={this.props.renderDay}
@@ -137,14 +141,16 @@ class ReservationList extends Component {
         return {
           reservation,
           date: i ? false : day,
-          day
+          day,
         };
       });
     } else if (res) {
-      return [{
-        date: iterator.clone(),
-        day
-      }];
+      return [
+        {
+          date: iterator.clone(),
+          day,
+        },
+      ];
     } else {
       return false;
     }
@@ -187,17 +193,23 @@ class ReservationList extends Component {
 
   render() {
     const {reservations} = this.props;
-    if (!reservations || !reservations[this.props.selectedDay.toString('yyyy-MM-dd')]) {
+    if (
+      !reservations ||
+      !reservations[this.props.selectedDay.toString('yyyy-MM-dd')]
+    ) {
       if (this.props.renderEmptyData) {
         return this.props.renderEmptyData();
       }
       return (
-        <ActivityIndicator style={{marginTop: 80}} color={this.props.theme && this.props.theme.indicatorColor}/>
+        <ActivityIndicator
+          style={{marginTop: 80}}
+          color={this.props.theme && this.props.theme.indicatorColor}
+        />
       );
     }
     return (
       <FlatList
-        ref={(c) => this.list = c}
+        ref={(c) => (this.list = c)}
         style={this.props.style}
         contentContainerStyle={this.styles.content}
         renderItem={this.renderRow.bind(this)}
@@ -205,7 +217,10 @@ class ReservationList extends Component {
         onScroll={this.onScroll.bind(this)}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={200}
-        onMoveShouldSetResponderCapture={() => {this.onListTouch(); return false;}}
+        onMoveShouldSetResponderCapture={() => {
+          this.onListTouch();
+          return false;
+        }}
         keyExtractor={(item, index) => String(index)}
         refreshControl={this.props.refreshControl}
         refreshing={this.props.refreshing || false}

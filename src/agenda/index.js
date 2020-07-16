@@ -28,6 +28,7 @@ export default class AgendaView extends Component {
   static displayName = 'Agenda';
 
   static propTypes = {
+    jalali: PropTypes.bool,
     /** Specify theme properties to override specific styles for calendar parts. Default = {} */
     theme: PropTypes.object,
     /** agenda container style */
@@ -97,7 +98,9 @@ export default class AgendaView extends Component {
 
   constructor(props) {
     super(props);
-
+    if (props.jalali) {
+      XDate.defaultLocale = 'fa';
+    }
     this.styles = styleConstructor(props.theme);
 
     const windowSize = Dimensions.get('window');
@@ -310,6 +313,7 @@ export default class AgendaView extends Component {
   renderReservations() {
     return (
       <ReservationsList
+        jalali={this.props.jalali}
         onScrollBeginDrag={this.props.onScrollBeginDrag}
         onScrollEndDrag={this.props.onScrollEndDrag}
         onMomentumScrollBegin={this.props.onMomentumScrollBegin}
@@ -335,7 +339,11 @@ export default class AgendaView extends Component {
 
   onDayChange(day) {
     const newDate = parseDate(day);
-    const withAnimation = dateutils.sameMonth(newDate, this.state.selectedDay);
+    const withAnimation = dateutils.sameMonth(
+      newDate,
+      this.state.selectedDay,
+      this.props.jalali,
+    );
 
     this.calendar.scrollToDay(day, this.calendarOffset(), withAnimation);
     this.setState({
@@ -460,6 +468,7 @@ export default class AgendaView extends Component {
           <Animated.View
             style={{flex: 1, transform: [{translateY: contentTranslate}]}}>
             <CalendarList
+              jalali={this.props.jalali}
               onLayout={() => {
                 this.calendar.scrollToDay(
                   this.state.selectedDay.clone(),
