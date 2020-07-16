@@ -30,6 +30,8 @@ class Calendar extends Component {
   static displayName = 'Calendar';
 
   static propTypes = {
+    /** Specify persian calendar. Default = false */
+    jalali: PropTypes.bool,
     /** Specify theme properties to override specific styles for calendar parts. Default = {} */
     theme: PropTypes.object,
     /** Collection of dates that have to be marked. Default = {} */
@@ -108,7 +110,9 @@ class Calendar extends Component {
 
   constructor(props) {
     super(props);
-
+    if (props.jalali) {
+      XDate.defaultLocale = 'fa';
+    }
     this.style = styleConstructor(this.props.theme);
     this.state = {
       currentMonth: props.current ? parseDate(props.current) : XDate(),
@@ -196,9 +200,8 @@ class Calendar extends Component {
       )} ${markingLabel}`;
     }
 
-    return `${isToday ? 'today' : ''} ${day.toString(
-      'dddd d MMMM yyyy',
-    )} ${markingLabel}`;
+    //day.toString('dddd d MMMM yyyy')
+    return `${isToday ? 'today' : ''} ${day.toString()} ${markingLabel}`;
   };
 
   renderDay(day, id) {
@@ -209,21 +212,23 @@ class Calendar extends Component {
       state = 'disabled';
     } else if (this.isDateNotInTheRange(minDate, maxDate, day)) {
       state = 'disabled';
-    } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
+    } else if (
+      !dateutils.sameMonth(day, this.state.currentMonth, this.props.jalali)
+    ) {
       state = 'disabled';
     } else if (dateutils.sameDate(day, XDate())) {
       state = 'today';
     }
 
     if (
-      !dateutils.sameMonth(day, this.state.currentMonth) &&
+      !dateutils.sameMonth(day, this.state.currentMonth, this.props.jalali) &&
       this.props.hideExtraDays
     ) {
       return <View key={id} style={{flex: 1}} />;
     }
 
     const DayComp = this.getDayComponent();
-    const date = day.getDate();
+    const date = this.props.jalali ? dateutils.pDateDay(day) : day.getDate();
     const dateAsObject = xdateToData(day);
     const accessibilityLabel = this.getAccessibilityLabel(state, day);
 
@@ -372,9 +377,14 @@ class Calendar extends Component {
 
   render() {
     const {currentMonth} = this.state;
-    const {firstDay, showSixWeeks, hideExtraDays} = this.props;
+    const {firstDay, showSixWeeks, hideExtraDays, jalali} = this.props;
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
-    const days = dateutils.page(currentMonth, firstDay, shouldShowSixWeeks);
+    const days = dateutils.page(
+      currentMonth,
+      firstDay,
+      shouldShowSixWeeks,
+      jalali,
+    );
 
     const weeks = [];
     while (days.length) {
@@ -407,6 +417,7 @@ class Calendar extends Component {
           importantForAccessibility={this.props.importantForAccessibility} // Android
         >
           <CalendarHeader
+            jalali={this.props.jalali}
             testID={this.props.testID}
             ref={(c) => (this.header = c)}
             style={this.props.headerStyle}
