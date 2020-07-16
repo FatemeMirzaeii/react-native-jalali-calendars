@@ -3,7 +3,9 @@ import com.facebook.react.ReactNativeHost;
 import com.reactnativenavigation.NavigationApplication;
 
 import com.facebook.react.ReactPackage;
+import com.facebook.react.PackageList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,34 +15,26 @@ import com.reactnativenavigation.react.ReactGateway;
 
 
 public class MainApplication extends NavigationApplication {
+   private final ReactNativeHost mReactNativeHost =
+           new NavigationReactNativeHost(this) {
+               @Override
+               protected String getJSMainModuleName() {
+                   return "index";
+               }
 
-  @Override
-  protected ReactGateway createReactGateway() {
-    ReactNativeHost host = new NavigationReactNativeHost(this, isDebug(), createAdditionalReactPackages()) {
-      @Override
-      protected String getJSMainModuleName() {
-        return "index";
-      }
-    };
-    return new ReactGateway(this, isDebug(), host);
-  }
+               @Override
+               public boolean getUseDeveloperSupport() {
+                   return BuildConfig.DEBUG;
+               }
 
-  @Override
-  public boolean isDebug() {
-    // Make sure you are using BuildConfig from your own application
-    return BuildConfig.DEBUG;
+               @Override
+               public List<ReactPackage> getPackages() {
+                   ArrayList<ReactPackage> packages = new PackageList(this).getPackages();
+                   return packages;
+               }
+           };
+    @Override
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
+    }
   }
-
-  protected List<ReactPackage> getPackages() {
-    // Add additional packages you require here
-    // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(
-            // eg. new VectorIconsPackage()
-    );
-  }
-
-  @Override
-  public List<ReactPackage> createAdditionalReactPackages() {
-    return getPackages();
-  }
-}
