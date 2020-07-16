@@ -185,6 +185,7 @@ class WeekCalendar extends Component {
     return (
       <Week
         {...others}
+        jalali={this.props.jalali}
         key={item}
         current={item}
         style={[{width: calendarWidth || this.containerWidth}, style]}

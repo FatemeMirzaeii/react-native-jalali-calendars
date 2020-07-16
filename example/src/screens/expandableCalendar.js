@@ -198,6 +198,7 @@ export default class ExpandableCalendarScreen extends Component {
   render() {
     return (
       <CalendarProvider
+        jalali={true}
         date={ITEMS[0].title}
         onDateChanged={this.onDateChanged}
         onMonthChange={this.onMonthChange}
@@ -210,12 +211,14 @@ export default class ExpandableCalendarScreen extends Component {
       >
         {this.props.weekView ? (
           <WeekCalendar
+            jalali={true}
             testID={testIDs.weekCalendar.CONTAINER}
             firstDay={1}
             markedDates={this.getMarkedDates()}
           />
         ) : (
           <ExpandableCalendar
+            jalali={true}
             testID={testIDs.expandableCalendar.CONTAINER}
             // horizontal={false}
             // hideArrows
@@ -233,6 +236,7 @@ export default class ExpandableCalendarScreen extends Component {
           />
         )}
         <AgendaList
+          jalali={true}
           sections={ITEMS}
           extraData={this.state}
           renderItem={this.renderItem}

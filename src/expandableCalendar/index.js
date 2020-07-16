@@ -72,6 +72,7 @@ class ExpandableCalendar extends Component {
 
   static defaultProps = {
     horizontal: true,
+    jalaliMonthFormat: 'jMMMM jYYYY',
     initialPosition: POSITIONS.CLOSED,
     firstDay: 0,
     leftArrowImageSource: require('../calendar/img/previous.png'),
@@ -227,7 +228,7 @@ class ExpandableCalendar extends Component {
   }
 
   getNumberOfWeeksInMonth(month) {
-    const days = dateutils.page(month, this.props.firstDay);
+    const days = dateutils.page(month, this.props.firstDay, this.props.jalali);
     return days.length / 7;
   }
 
@@ -460,7 +461,9 @@ class ExpandableCalendar extends Component {
   }
 
   renderHeader() {
-    const monthYear = XDate(this.props.context.date).toString('MMMM yyyy');
+    const monthYear = this.props.jalali
+      ? dateutils.pFormat(this.props.context.date, this.props.jalaliMonthFormat)
+      : XDate(this.props.context.date).toString('MMMM yyyy');
 
     return (
       <Animated.View
@@ -554,6 +557,7 @@ class ExpandableCalendar extends Component {
         style={[allowShadow && this.style.containerShadow, style]}>
         {screenReaderEnabled ? (
           <Calendar
+            jalali={this.props.jalali}
             testID="calendar"
             {...others}
             theme={themeObject}
@@ -570,6 +574,7 @@ class ExpandableCalendar extends Component {
             style={{height: deltaY}}
             {...this.panResponder.panHandlers}>
             <CalendarList
+              jalali={this.props.jalali}
               testID="calendar"
               horizontal={horizontal}
               {...others}
@@ -586,7 +591,7 @@ class ExpandableCalendar extends Component {
               onPressArrowRight={this.onPressArrowRight}
               hideExtraDays={!horizontal}
               renderArrow={this.renderArrow}
-              staticHeader
+              // staticHeader
             />
             {horizontal && this.renderWeekCalendar()}
             {!hideKnob && this.renderKnob()}

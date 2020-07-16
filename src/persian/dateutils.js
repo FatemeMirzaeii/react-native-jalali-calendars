@@ -60,6 +60,7 @@ var pSetLocale = function () {
       'بهمن',
       'اسفند',
     ],
+    today: 'امروز',
   };
 };
 

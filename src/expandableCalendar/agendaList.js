@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {SectionList, Text} from 'react-native';
 import PropTypes from 'prop-types';
 import XDate from 'xdate';
+import dateutils from '../dateutils';
 
 import styleConstructor from './style';
 import asCalendarConsumer from './asCalendarConsumer';
@@ -21,6 +22,7 @@ class AgendaList extends Component {
 
   static propTypes = {
     ...SectionList.propTypes,
+    jalali: PropTypes.bool,
     /** day format in section title. Formatting values: http://arshaw.com/xdate/#Formatting */
     dayFormat: PropTypes.string,
     /** style passed to the section view */
@@ -38,6 +40,7 @@ class AgendaList extends Component {
 
   constructor(props) {
     super(props);
+
     this.style = styleConstructor(props.theme);
 
     this._topSection = _.get(props, 'sections[0].title');
@@ -143,10 +146,14 @@ class AgendaList extends Component {
   };
 
   renderSectionHeader = ({section: {title}}) => {
-    const today = XDate().toString(this.props.dayFormat);
-    const date = XDate(title).toString(this.props.dayFormat);
+    const today = XDate().toString();
+    const date = this.props.jalali
+      ? dateutils.pFormat(title, 'dddd jDD jMMMM')
+      : XDate(title).toString(this.props.dayFormat);
+
     const todayString =
       XDate.locales[XDate.defaultLocale].today || commons.todayString;
+
     const sectionTitle = date === today ? `${todayString}, ${date}` : date;
 
     return (

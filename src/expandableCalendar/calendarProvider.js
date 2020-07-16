@@ -23,6 +23,7 @@ class CalendarProvider extends Component {
   static displayName = 'CalendarProvider';
 
   static propTypes = {
+    jalali: PropTypes.bool,
     /** Initial date in 'yyyy-MM-dd' format. Default = Date() */
     date: PropTypes.any.isRequired,
     /** Callback for date change event */
@@ -45,6 +46,9 @@ class CalendarProvider extends Component {
 
   constructor(props) {
     super(props);
+    if (props.jalali) {
+      XDate.defaultLocale = 'fa';
+    }
     this.style = styleConstructor(props.theme);
 
     this.state = {
@@ -73,8 +77,11 @@ class CalendarProvider extends Component {
   };
 
   setDate = (date, updateSource) => {
-    const sameMonth = dateutils.sameMonth(XDate(date), XDate(this.state.date));
-
+    const sameMonth = dateutils.sameMonth(
+      XDate(date),
+      XDate(this.state.date),
+      this.props.jalali,
+    );
     this.setState(
       {date, updateSource, buttonIcon: this.getButtonIcon(date)},
       () => {
