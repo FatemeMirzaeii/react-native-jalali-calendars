@@ -28,10 +28,12 @@ const CalendarsScreen = () => {
   const renderCalendarWithSelectableDate = () => {
     return (
       <Fragment>
-        <Text style={styles.text}>Calendar with selectable date</Text>
+        <Text style={styles.text}>تقویم فارسی با قابلیت انتخاب روزها</Text>
         <Calendar
+          jalali={true}
+          firstDay={6}
           testID={testIDs.calendars.FIRST}
-          current={'2020-02-02'}
+          //current={'2020-02-02'}
           style={styles.calendar}
           hideExtraDays
           onDayPress={onDayPress}
