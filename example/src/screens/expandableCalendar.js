@@ -199,7 +199,7 @@ export default class ExpandableCalendarScreen extends Component {
     return (
       <CalendarProvider
         jalali={true}
-        date={ITEMS[0].title}
+        date={today}
         onDateChanged={this.onDateChanged}
         onMonthChange={this.onMonthChange}
         showTodayButton
@@ -229,7 +229,7 @@ export default class ExpandableCalendarScreen extends Component {
             // headerStyle={styles.calendar} // for horizontal only
             // disableWeekScroll
             // theme={this.getTheme()}
-            firstDay={1}
+            firstDay={6}
             markedDates={this.getMarkedDates()} // {'2019-06-01': {marked: true}, '2019-06-02': {marked: true}, '2019-06-03': {marked: true}};
             leftArrowImageSource={require('../img/previous.png')}
             rightArrowImageSource={require('../img/next.png')}

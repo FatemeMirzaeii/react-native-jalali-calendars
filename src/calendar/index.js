@@ -369,7 +369,9 @@ class Calendar extends Component {
     }
 
     return (
-      <View style={this.style.week} key={id}>
+      <View
+        style={this.props.jalali ? this.style.rtlWeek : this.style.week}
+        key={id}>
         {week}
       </View>
     );

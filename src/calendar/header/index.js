@@ -175,7 +175,11 @@ class CalendarHeader extends Component {
             this.props.renderArrow('left')
           ) : (
             <Image
-              source={require('../img/previous.png')}
+              source={
+                this.props.jalali
+                  ? require('../img/next.png')
+                  : require('../img/previous.png')
+              }
               style={
                 this.props.disableArrowLeft
                   ? this.style.disabledArrowImage
@@ -200,7 +204,11 @@ class CalendarHeader extends Component {
             this.props.renderArrow('right')
           ) : (
             <Image
-              source={require('../img/next.png')}
+              source={
+                this.props.jalali
+                  ? require('../img/previous.png')
+                  : require('../img/next.png')
+              }
               style={
                 this.props.disableArrowRight
                   ? this.style.disabledArrowImage
@@ -235,7 +243,8 @@ class CalendarHeader extends Component {
         accessibilityElementsHidden={this.props.accessibilityElementsHidden} // iOS
         importantForAccessibility={this.props.importantForAccessibility} // Android
       >
-        <View style={this.style.header}>
+        <View
+          style={this.props.jalali ? this.style.rtlHeader : this.style.header}>
           {leftArrow}
           <View style={this.style.headerContainer}>
             {this.renderHeader()}
@@ -244,7 +253,8 @@ class CalendarHeader extends Component {
           {rightArrow}
         </View>
         {!this.props.hideDayNames && (
-          <View style={this.style.week}>
+          <View
+            style={this.props.jalali ? this.style.rtlWeek : this.style.week}>
             {this.props.weekNumbers && (
               <Text
                 allowFontScaling={false}

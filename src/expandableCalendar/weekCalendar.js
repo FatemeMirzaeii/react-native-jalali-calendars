@@ -222,7 +222,11 @@ class WeekCalendar extends Component {
           !hideDayNames && {paddingBottom: 6},
         ]}>
         {!hideDayNames && (
-          <View style={[this.style.week, {marginTop: 12, marginBottom: -2}]}>
+          <View
+            style={[
+              this.props.jalali ? this.style.rtlWeek : this.style.week,
+              {marginTop: 12, marginBottom: -2},
+            ]}>
             {/* {this.props.weekNumbers && <Text allowFontScaling={false} style={this.style.dayHeader}></Text>} */}
             {weekDaysNames.map((day, idx) => (
               <Text

@@ -165,7 +165,13 @@ class Week extends Component {
 
     return (
       <View style={this.style.container}>
-        <View style={[this.style.week, this.props.style]}>{week}</View>
+        <View
+          style={[
+            this.props.jalali ? this.style.rtlWeek : this.style.week,
+            this.props.style,
+          ]}>
+          {week}
+        </View>
       </View>
     );
   }
