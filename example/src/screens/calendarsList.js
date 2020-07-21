@@ -8,8 +8,8 @@ const CalendarsList = () => {
   return (
     <CalendarList
       jalali={true}
+      firstDay={6}
       testID={testIDs.calendarList.CONTAINER}
-      current={'2020-06-10'}
       pastScrollRange={24}
       futureScrollRange={24}
       // renderHeader={(date) => {

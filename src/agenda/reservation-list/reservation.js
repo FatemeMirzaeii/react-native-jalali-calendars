@@ -77,7 +77,10 @@ class Reservation extends Component {
       content = this.props.renderEmptyDate(date);
     }
     return (
-      <View style={this.styles.container}>
+      <View
+        style={
+          this.props.jalali ? this.styles.rtlContainer : this.styles.container
+        }>
         {this.renderDate(date, reservation)}
         <View style={{flex: 1}}>{content}</View>
       </View>

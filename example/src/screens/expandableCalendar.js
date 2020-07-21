@@ -213,7 +213,7 @@ export default class ExpandableCalendarScreen extends Component {
           <WeekCalendar
             jalali={true}
             testID={testIDs.weekCalendar.CONTAINER}
-            firstDay={1}
+            firstDay={6}
             markedDates={this.getMarkedDates()}
           />
         ) : (
@@ -231,8 +231,8 @@ export default class ExpandableCalendarScreen extends Component {
             // theme={this.getTheme()}
             firstDay={6}
             markedDates={this.getMarkedDates()} // {'2019-06-01': {marked: true}, '2019-06-02': {marked: true}, '2019-06-03': {marked: true}};
-            leftArrowImageSource={require('../img/previous.png')}
-            rightArrowImageSource={require('../img/next.png')}
+            //leftArrowImageSource={require('../img/previous.png')}
+            //rightArrowImageSource={require('../img/next.png')}
           />
         )}
         <AgendaList

@@ -20,6 +20,7 @@ const HorizontalCalendarList = () => {
   return (
     <CalendarList
       jalali={true}
+      firstDay={6}
       testID={testIDs.horizontalList.CONTAINER}
       markedDates={markedDates}
       current={selectedDate}

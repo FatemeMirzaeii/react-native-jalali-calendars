@@ -149,7 +149,7 @@ export default class TimelineCalendarScreen extends Component {
       textMonthFontWeight: 'bold',
       // day names
       textSectionTitleColor: black,
-      textDayHeaderFontSize: 12,
+      textDayHeaderFontSize: 9,
       textDayHeaderFontFamily: 'HelveticaNeue',
       textDayHeaderFontWeight: 'normal',
       // today
@@ -177,6 +177,7 @@ export default class TimelineCalendarScreen extends Component {
   render() {
     return (
       <CalendarProvider
+        jalali={true}
         // date={ITEMS[0].title}
         date={this.state.currentDate}
         onDateChanged={this.onDateChanged}
@@ -187,12 +188,13 @@ export default class TimelineCalendarScreen extends Component {
         // todayBottomMargin={16}
       >
         <ExpandableCalendar
+          jalali={true}
           // horizontal={false}
           // hideArrows
           // disablePan
           // hideKnob
           // initialPosition={ExpandableCalendar.positions.OPEN}
-          firstDay={1}
+          firstDay={6}
           // markedDates={this.getMarkedDates()} // {'2019-06-01': {marked: true}, '2019-06-02': {marked: true}, '2019-06-03': {marked: true}};
           // markedDates={() => {}} // {'2019-06-01': {marked: true}, '2019-06-02': {marked: true}, '2019-06-03': {marked: true}};
           theme={this.getTheme()}

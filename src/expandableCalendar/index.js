@@ -530,6 +530,10 @@ class ExpandableCalendar extends Component {
       <Image
         source={
           direction === 'right'
+            ? this.props.jalali
+              ? this.props.leftArrowImageSource
+              : this.props.rightArrowImageSource
+            : this.props.jalali
             ? this.props.rightArrowImageSource
             : this.props.leftArrowImageSource
         }

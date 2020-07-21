@@ -359,6 +359,7 @@ class CalendarList extends Component {
       <View>
         <FlatList
           testID={this.props.testID}
+          inverted={this.props.jalali}
           onLayout={this.onLayout}
           ref={(c) => (this.listView = c)}
           //scrollEventThrottle={1000}
