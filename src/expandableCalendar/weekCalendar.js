@@ -246,6 +246,7 @@ class WeekCalendar extends Component {
         <FlatList
           ref={this.list}
           data={items}
+          inverted={this.props.jalali}
           extraData={extraData}
           style={this.style.container}
           horizontal

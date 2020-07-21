@@ -136,7 +136,7 @@ class CalendarHeader extends Component {
     if (renderHeader) {
       return renderHeader(month);
     }
-    const formattedMonth = this.props.jalali
+    const formattedMonthName = this.props.jalali
       ? pFormat(this.props.month, this.props.jalaliMonthFormat)
       : month.toString(monthFormat);
 
@@ -147,7 +147,7 @@ class CalendarHeader extends Component {
           style={this.style.monthText}
           testID={testID ? `${HEADER_MONTH_NAME}-${testID}` : HEADER_MONTH_NAME}
           {...webProps}>
-          {formattedMonth}
+          {formattedMonthName}
         </Text>
       </Fragment>
     );
