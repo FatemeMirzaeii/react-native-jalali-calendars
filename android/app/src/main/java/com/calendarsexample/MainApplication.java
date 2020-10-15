@@ -1,40 +1,34 @@
 package com.calendarsexample;
-import com.facebook.react.ReactNativeHost;
-import com.reactnativenavigation.NavigationApplication;
 
-import com.facebook.react.ReactPackage;
 import com.facebook.react.PackageList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
 import com.reactnativenavigation.NavigationApplication;
 import com.reactnativenavigation.react.NavigationReactNativeHost;
-import com.reactnativenavigation.react.ReactGateway;
+
+import java.util.List;
 
 
 public class MainApplication extends NavigationApplication {
-   private final ReactNativeHost mReactNativeHost =
-           new NavigationReactNativeHost(this) {
-               @Override
-               protected String getJSMainModuleName() {
-                   return "index";
-               }
+    private final ReactNativeHost mReactNativeHost = new NavigationReactNativeHost(this) {
 
-               @Override
-               public boolean getUseDeveloperSupport() {
-                   return BuildConfig.DEBUG;
-               }
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
 
-               @Override
-               public List<ReactPackage> getPackages() {
-                   ArrayList<ReactPackage> packages = new PackageList(this).getPackages();
-                   return packages;
-               }
-           };
+        @Override
+        protected List<ReactPackage> getPackages() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            List<ReactPackage> packages = new PackageList(this).getPackages();
+            // Packages that cannot be autolinked yet can be added manually here, for example:
+            // packages.add(new MyReactNativePackage());
+            return packages;
+        }
+    };
+
     @Override
     public ReactNativeHost getReactNativeHost() {
         return mReactNativeHost;
     }
-  }
+}

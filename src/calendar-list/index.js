@@ -72,9 +72,9 @@ class CalendarList extends Component {
     showScrollIndicator: false,
     scrollEnabled: true,
     scrollsToTop: false,
-    removeClippedSubviews: Platform.OS === 'android' ? false : true,
-    keyExtractor: (item, index) => String(index),
-  };
+    removeClippedSubviews: Platform.OS === 'android',
+    keyExtractor: (item, index) => String(index)
+  }
 
   constructor(props) {
     super(props);
@@ -258,9 +258,7 @@ class CalendarList extends Component {
         scrollToMonth={this.scrollToMonth.bind(this)}
         item={item}
         calendarHeight={this.props.calendarHeight}
-        calendarWidth={
-          this.props.horizontal ? this.props.calendarWidth : undefined
-        }
+        calendarWidth={this.props.horizontal ? this.props.calendarWidth : undefined}
         {...this.props}
         style={this.props.calendarStyle}
       />
@@ -269,14 +267,8 @@ class CalendarList extends Component {
 
   getItemLayout(data, index) {
     return {
-      length: this.props.horizontal
-        ? this.props.calendarWidth
-        : this.props.calendarHeight,
-      offset:
-        (this.props.horizontal
-          ? this.props.calendarWidth
-          : this.props.calendarHeight) * index,
-      index,
+      length: this.props.horizontal ? this.props.calendarWidth : this.props.calendarHeight,
+      offset: (this.props.horizontal ? this.props.calendarWidth : this.props.calendarHeight) * index, index
     };
   }
 
@@ -297,21 +289,18 @@ class CalendarList extends Component {
       return;
     }
 
-    this.setState(
-      {
-        currentMonth: day.clone(),
-      },
-      () => {
-        this.scrollToMonth(this.state.currentMonth);
+    this.setState({
+      currentMonth: day.clone()
+    }, () => {
+      this.scrollToMonth(this.state.currentMonth);
 
-        if (!doNotTriggerListeners) {
-          const currMont = this.state.currentMonth.clone();
-          if (this.props.onMonthChange) {
-            this.props.onMonthChange(xdateToData(currMont));
-          }
-          if (this.props.onVisibleMonthsChange) {
-            this.props.onVisibleMonthsChange([xdateToData(currMont)]);
-          }
+      if (!doNotTriggerListeners) {
+        const currMont = this.state.currentMonth.clone();
+        if (this.props.onMonthChange) {
+          this.props.onMonthChange(xdateToData(currMont));
+        }
+        if (this.props.onVisibleMonthsChange) {
+          this.props.onVisibleMonthsChange([xdateToData(currMont)]);
         }
       },
     );

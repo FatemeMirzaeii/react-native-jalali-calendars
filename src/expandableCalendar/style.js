@@ -50,6 +50,7 @@ export default function styleConstructor(theme = {}) {
       paddingTop: 24, // 8
       paddingBottom: 8,
       paddingLeft: 20,
+      paddingRight: 20,
       backgroundColor: appStyle.calendarBackground,
       textAlign: 'left',
       textTransform: 'uppercase',
@@ -114,10 +115,10 @@ export default function styleConstructor(theme = {}) {
     },
     arrowImage: {
       tintColor: appStyle.arrowColor,
+      transform: commons.isRTL ? [{scaleX: -1}] : undefined,
     },
     todayButtonContainer: {
-      alignItems:
-        appStyle.todayButtonPosition === 'right' ? 'flex-end' : 'flex-start',
+      alignItems: appStyle.todayButtonPosition === 'right' ? 'flex-end' : 'flex-start',
       position: 'absolute',
       left: 20,
       right: 20,
@@ -127,8 +128,7 @@ export default function styleConstructor(theme = {}) {
       height: commons.isTablet ? 40 : 28,
       paddingHorizontal: commons.isTablet ? 20 : 12,
       borderRadius: commons.isTablet ? 20 : 14,
-      flexDirection:
-        appStyle.todayButtonPosition === 'right' ? 'row-reverse' : 'row',
+      flexDirection: appStyle.todayButtonPosition === 'right' ? 'row-reverse' : 'row',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
@@ -146,9 +146,7 @@ export default function styleConstructor(theme = {}) {
     },
     todayButtonText: {
       color: appStyle.todayButtonTextColor,
-      fontSize: commons.isTablet
-        ? appStyle.todayButtonFontSize + 2
-        : appStyle.todayButtonFontSize,
+      fontSize: commons.isTablet ? appStyle.todayButtonFontSize + 2 : appStyle.todayButtonFontSize,
       fontWeight: appStyle.todayButtonFontWeight,
       fontFamily: appStyle.todayButtonFontFamily,
     },

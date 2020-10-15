@@ -1,6 +1,6 @@
 import React, {useState, Fragment} from 'react';
-import {StyleSheet, View, ScrollView, Text} from 'react-native';
-import {Calendar} from 'react-native-jalali-calendars';
+import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
+import {Calendar} from 'react-native-calendars';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -62,9 +62,7 @@ const CalendarsScreen = () => {
   const renderCalendarWithMarkedDatesAndHiddenArrows = () => {
     return (
       <Fragment>
-        <Text style={styles.text}>
-          Calendar with marked dates and hidden arrows
-        </Text>
+        <Text style={styles.text}>Calendar with marked dates and hidden arrows</Text>
         <Calendar
           style={styles.calendar}
           current={'2012-05-16'}
@@ -81,11 +79,7 @@ const CalendarsScreen = () => {
             '2012-05-24': {selected: true, marked: true, dotColor: 'red'},
             '2012-05-25': {marked: true, dotColor: 'red'},
             '2012-05-26': {marked: true},
-            '2012-05-27': {
-              disabled: true,
-              activeOpacity: 0,
-              disableTouchEvent: false,
-            },
+            '2012-05-27': {disabled: true, activeOpacity: 0, disableTouchEvent: false},
           }}
           hideArrows={true}
           // disabledByDefault={true}
@@ -97,9 +91,7 @@ const CalendarsScreen = () => {
   const renderCalendarWithPeriodMarkingAndSpinner = () => {
     return (
       <Fragment>
-        <Text style={styles.text}>
-          Calendar with period marking and spinner
-        </Text>
+        <Text style={styles.text}>Calendar with period marking and spinner</Text>
         <Calendar
           // style={styles.calendar}
           current={'2012-05-16'}
@@ -145,9 +137,7 @@ const CalendarsScreen = () => {
   const renderCalendarWithPeriodMarkingAndDotMarking = () => {
     return (
       <Fragment>
-        <Text style={styles.text}>
-          Calendar with period marking and dot marking
-        </Text>
+        <Text style={styles.text}>Calendar with period marking and dot marking</Text>
         <Calendar
           current={'2012-05-16'}
           minDate={'2012-05-01'}
@@ -168,12 +158,7 @@ const CalendarsScreen = () => {
                 fontWeight: '700',
               },
             },
-            '2012-05-23': {
-              color: '#70d7c7',
-              textColor: 'white',
-              marked: true,
-              dotColor: 'white',
-            },
+            '2012-05-23': {color: '#70d7c7', textColor: 'white', marked: true, dotColor: 'white'},
             '2012-05-24': {color: '#70d7c7', textColor: 'white'},
             '2012-05-25': {
               endingDay: true,
@@ -258,9 +243,7 @@ const CalendarsScreen = () => {
   const renderCalendarWithCustomMarkingType = () => {
     return (
       <Fragment>
-        <Text style={styles.text}>
-          Custom calendar with custom marking type
-        </Text>
+        <Text style={styles.text}>Custom calendar with custom marking type</Text>
         <Calendar
           style={styles.calendar}
           onDayLongPress={this.onDayLongPress}
@@ -360,7 +343,6 @@ const CalendarsScreen = () => {
       <Fragment>
         <Text style={styles.text}>Calendar with custom day component</Text>
         <Calendar
-          testID={testIDs.calendars.LAST}
           style={[
             styles.calendar,
             {
@@ -372,13 +354,7 @@ const CalendarsScreen = () => {
           dayComponent={({date, state}) => {
             return (
               <View>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: state === 'disabled' ? 'gray' : 'black',
-                  }}>
-                  {date.day}
-                </Text>
+                <Text style={{textAlign: 'center', color: state === 'disabled' ? 'gray' : 'black'}}>{date.day}</Text>
               </View>
             );
           }}
@@ -387,10 +363,48 @@ const CalendarsScreen = () => {
     );
   };
 
+  const renderCalendarWithCustomHeader = () => {
+    const CustomHeader = React.forwardRef((props, ref) => {
+      return (
+        <View
+          ref={ref}
+          {...props}
+          style={{
+            backgroundColor: '#FCC',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginHorizontal: -4,
+            padding: 8,
+          }}
+        >
+          <Text>This is a custom header!</Text>
+          <TouchableOpacity onPress={() => console.log('Tapped!')}>
+            <Text>Tap Me</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    });
+
+    return (
+      <Fragment>
+        <Text style={styles.text}>Calendar with custom header component</Text>
+        <Calendar
+          testID={testIDs.calendars.LAST}
+          style={[
+            styles.calendar,
+            {
+              height: 250,
+              borderBottomWidth: 1,
+              borderBottomColor: 'lightgrey',
+            },
+          ]}
+          customHeader={CustomHeader}
+        />
+      </Fragment>
+    );
+  };
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      testID={testIDs.calendars.CONTAINER}>
+    <ScrollView showsVerticalScrollIndicator={false} testID={testIDs.calendars.CONTAINER}>
       {renderCalendarWithSelectableDate()}
       {renderCalendarWithWeekNumbers()}
       {renderCalendarWithMarkedDatesAndHiddenArrows()}
@@ -400,6 +414,7 @@ const CalendarsScreen = () => {
       {renderCalendarWithMultiPeriodMarking()}
       {renderCalendarWithCustomMarkingType()}
       {renderCalendarWithCustomDay()}
+      {renderCalendarWithCustomHeader()}
     </ScrollView>
   );
 };

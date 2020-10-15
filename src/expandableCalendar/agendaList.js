@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import XDate from 'xdate';
 import dateutils from '../dateutils';
 
+import moment from 'moment';
 import styleConstructor from './style';
 import asCalendarConsumer from './asCalendarConsumer';
 
@@ -25,12 +26,11 @@ class AgendaList extends Component {
     jalali: PropTypes.bool,
     /** day format in section title. Formatting values: http://arshaw.com/xdate/#Formatting */
     dayFormat: PropTypes.string,
+    /** whether to use moment.js for date string formatting
+     * (remember to pass 'dayFormat' with appropriate format, like 'dddd, MMM D') */
+    useMoment: PropTypes.bool,
     /** style passed to the section view */
-    sectionStyle: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.number,
-      PropTypes.array,
-    ]),
+    sectionStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
   };
 
   static defaultProps = {
@@ -79,10 +79,7 @@ class AgendaList extends Component {
     const {updateSource, date} = this.props.context;
     if (date !== prevProps.context.date) {
       // NOTE: on first init data should set first section to the current date!!!
-      if (
-        updateSource !== UPDATE_SOURCES.LIST_DRAG &&
-        updateSource !== UPDATE_SOURCES.CALENDAR_INIT
-      ) {
+      if (updateSource !== UPDATE_SOURCES.LIST_DRAG && updateSource !== UPDATE_SOURCES.CALENDAR_INIT) {
         const sectionIndex = this.getSectionIndex(date);
         this.scrollToSection(sectionIndex);
       }
@@ -111,12 +108,7 @@ class AgendaList extends Component {
         this._topSection = topSection;
         if (this.didScroll) {
           // to avoid setDate() on first load (while setting the initial context.date value)
-          _.invoke(
-            this.props.context,
-            'setDate',
-            this._topSection,
-            UPDATE_SOURCES.LIST_DRAG,
-          );
+          _.invoke(this.props.context, 'setDate', this._topSection, UPDATE_SOURCES.LIST_DRAG);
         }
       }
     }
@@ -146,30 +138,40 @@ class AgendaList extends Component {
   };
 
   renderSectionHeader = ({section: {title}}) => {
-    const today = XDate().toString();
-    const date = this.props.jalali
-      ? dateutils.pFormat(title, 'dddd jDD jMMMM')
-      : XDate(title).toString(this.props.dayFormat);
+    y;
+    if (this.props.dayFormat) {
+      let date;
+      let today;
 
-    const todayString =
-      XDate.locales[XDate.defaultLocale].today || commons.todayString;
+      if (this.props.useMoment) {
+        date = this.props.jalali
+          ? dateutils.pFormat(title, 'dddd jDD jMMMM')
+          : moment(title).format(this.props.dayFormat);
+        today = moment().format(this.props.dayFormat);
+      } else {
+        date = this.props.jalali
+          ? dateutils.pFormat(title, 'dddd jDD jMMMM')
+          : XDate(title).toString(this.props.dayFormat);
+        today = XDate().toString(this.props.dayFormat);
+      }
 
-    const sectionTitle = date === today ? `${todayString}, ${date}` : date;
+      const todayString = XDate.locales[XDate.defaultLocale].today || commons.todayString;
+      sectionTitle = date === today ? `${todayString}, ${date}` : date;
+    }
 
     return (
       <Text
         allowFontScaling={false}
         style={[this.style.sectionText, this.props.sectionStyle]}
-        onLayout={this.onHeaderLayout}>
+        onLayout={this.onHeaderLayout}
+      >
         {sectionTitle}
       </Text>
     );
   };
 
   keyExtractor = (item, index) => {
-    return _.isFunction(this.props.keyExtractor)
-      ? this.props.keyExtractor(item, index)
-      : String(index);
+    return _.isFunction(this.props.keyExtractor) ? this.props.keyExtractor(item, index) : String(index);
   };
 
   render() {

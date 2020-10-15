@@ -100,21 +100,16 @@ class Week extends Component {
   // }
 
   renderDay(day, id) {
-    const {current} = this.props;
+    const {current, disableAllTouchEventsForDisabledDays} = this.props;
     const minDate = parseDate(this.props.minDate);
     const maxDate = parseDate(this.props.maxDate);
 
     let state = '';
     if (this.props.disabledByDefault) {
       state = 'disabled';
-    } else if (
-      (minDate && !dateutils.isGTE(day, minDate)) ||
-      (maxDate && !dateutils.isLTE(day, maxDate))
-    ) {
+    } else if ((minDate && !dateutils.isGTE(day, minDate)) || (maxDate && !dateutils.isLTE(day, maxDate))) {
       state = 'disabled';
-    } else if (
-      !dateutils.sameMonth(day, parseDate(current), this.props.jalali)
-    ) {
+    } else if (!dateutils.sameMonth(day, parseDate(current), this.props.jalali)) {
       // for extra days
       state = 'disabled';
     } else if (dateutils.sameDate(day, XDate())) {
@@ -141,7 +136,9 @@ class Week extends Component {
           onPress={this.props.onDayPress}
           onLongPress={this.props.onDayPress}
           date={dateAsObject}
-          marking={this.getDateMarking(day)}>
+          marking={this.getDateMarking(day)}
+          disableAllTouchEventsForDisabledDays={disableAllTouchEventsForDisabledDays}
+        >
           {dayDate}
         </DayComp>
       </View>
@@ -165,13 +162,7 @@ class Week extends Component {
 
     return (
       <View style={this.style.container}>
-        <View
-          style={[
-            this.props.jalali ? this.style.rtlWeek : this.style.week,
-            this.props.style,
-          ]}>
-          {week}
-        </View>
+        <View style={[this.props.jalali ? this.style.rtlWeek : this.style.week, this.props.style]}>{week}</View>
       </View>
     );
   }

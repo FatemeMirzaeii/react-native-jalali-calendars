@@ -7,8 +7,7 @@ buildscript {
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
-        RNNKotlinVersion = "1.3.61" // Or any version above 1.3.x
-        RNNKotlinStdlib = "kotlin-stdlib-jdk8"
+        RNNKotlinVersion = "1.3.72"
     }
     repositories {
         google()
@@ -17,9 +16,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        //classpath("com.android.tools.build:gradle:3.4.2")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61") // Or whatever Kotlin version you've specified above
-        classpath('com.android.tools.build:gradle:3.5.3') // Or higher
+        classpath("com.android.tools.build:gradle:3.4.2")
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
