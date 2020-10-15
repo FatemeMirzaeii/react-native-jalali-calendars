@@ -301,10 +301,10 @@ class Calendar extends Component {
       case SWIPE_DOWN:
         break;
       case SWIPE_LEFT:
-        this.onSwipeLeft();
+        this.props.jalali ? this.onSwipeRight() : this.onSwipeLeft();
         break;
       case SWIPE_RIGHT:
-        this.onSwipeRight();
+        this.props.jalali ? this.onSwipeLeft() : this.onSwipeRight();
         break;
     }
   };
