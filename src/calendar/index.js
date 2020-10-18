@@ -346,7 +346,7 @@ class Calendar extends Component {
 
   render() {
     const {currentMonth} = this.state;
-    const {firstDay, showSixWeeks, hideExtraDays, enableSwipeMonths} = this.props;
+    const {firstDay, showSixWeeks, hideExtraDays, enableSwipeMonths, jalali} = this.props;
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
     const days = dateutils.page(currentMonth, firstDay, shouldShowSixWeeks, jalali);
 
