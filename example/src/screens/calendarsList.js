@@ -10,8 +10,8 @@ const CalendarsList = () => {
       jalali={true}
       firstDay={6}
       testID={testIDs.calendarList.CONTAINER}
-      pastScrollRange={24}
-      futureScrollRange={24}
+      pastScrollRange={12}
+      futureScrollRange={12}
       // renderHeader={(date) => {
       //   const header = date.toString('MMMM yyyy');
       //   const [month, year] = header.split(' ');

@@ -1,6 +1,6 @@
 import React, {useState, Fragment} from 'react';
 import {StyleSheet, View, ScrollView, Text, TouchableOpacity} from 'react-native';
-import {Calendar} from 'react-native-calendars';
+import {Calendar} from 'react-native-jalali-calendars';
 import moment from 'moment';
 import _ from 'lodash';
 
