@@ -1,13 +1,6 @@
 const XDate = require('xdate');
 const PersianDateUtils = require('./persian/dateutils');
-const {
-  pFormat,
-  pDateDay,
-  pSetLocale,
-  pDiffMonths,
-  sameMonth,
-  month,
-} = PersianDateUtils;
+const {pFormat, pDateDay, pSetLocale, pDiffMonths, sameMonth, month} = PersianDateUtils;
 pSetLocale();
 // function sameMonth(a, b) {
 //   return (
@@ -61,14 +54,12 @@ function weekDayNames(firstDayOfWeek = 0) {
   let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
   const dayShift = firstDayOfWeek % 7;
   if (dayShift) {
-    weekDaysNames = weekDaysNames
-      .slice(dayShift)
-      .concat(weekDaysNames.slice(0, dayShift));
+    weekDaysNames = weekDaysNames.slice(dayShift).concat(weekDaysNames.slice(0, dayShift));
   }
   return weekDaysNames;
 }
 
-function page(xd, firstDayOfWeek, showSixWeeks, jalali = false) {
+function page(xd, firstDayOfWeek, jalali = false, showSixWeeks) {
   const days = month(xd, jalali);
   let before = [],
     after = [];

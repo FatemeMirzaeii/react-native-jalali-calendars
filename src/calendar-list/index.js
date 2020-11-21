@@ -80,10 +80,16 @@ class CalendarList extends Component {
     const date = parseDate(props.current) || XDate();
 
     for (let i = 0; i <= this.props.pastScrollRange + this.props.futureScrollRange; i++) {
-      const rangeDate = date.clone().addMonths(i - this.props.pastScrollRange, true);
+      const rangeDate = this.props.jalali
+        ? date
+            .clone()
+            .setDate(23) //first day of persian monthes are usually between 19th to 23th of Gregorian month.
+            .addMonths(i - this.props.pastScrollRange, true)
+        : date.clone().addMonths(i - this.props.pastScrollRange, true);
       const rangeDateStr = this.props.jalali
         ? dateutils.pFormat(rangeDate, 'jMMMM jYYYY')
         : rangeDate.toString('MMM yyyy');
+      // console.log('rangeDateString', rangeDateStr);
       texts.push(rangeDateStr);
       /*
        * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
@@ -178,6 +184,7 @@ class CalendarList extends Component {
   }
 
   onViewableItemsChanged({viewableItems}) {
+    // console.log('onViewableItemChanged', viewableItems);
     function rowIsCloseToViewable(index, distance) {
       for (let i = 0; i < viewableItems.length; i++) {
         if (Math.abs(index - parseInt(viewableItems[i].index)) <= distance) {
@@ -196,7 +203,9 @@ class CalendarList extends Component {
       const rowShouldBeRendered = rowIsCloseToViewable(i, 1);
 
       if (rowShouldBeRendered && !rowclone[i].getTime) {
-        val = this.state.openDate.clone().addMonths(i - this.props.pastScrollRange, true);
+        const openDate = this.props.jalali ? this.state.openDate.clone().setDate(23) : this.state.openDate.clone();
+        //again I've setDate to 23 for handleing month changes.
+        val = openDate.addMonths(i - this.props.pastScrollRange, true);
       } else if (!rowShouldBeRendered) {
         val = this.state.texts[i];
       }
@@ -255,7 +264,9 @@ class CalendarList extends Component {
 
     this.setState(
       {
-        currentMonth: day.clone(),
+        currentMonth: this.props.jalali
+          ? day.clone().setDate(23) //first day of persian monthes are usually between 19th to 23th of Gregorian month.
+          : day.clone(),
       },
       () => {
         this.scrollToMonth(this.state.currentMonth);

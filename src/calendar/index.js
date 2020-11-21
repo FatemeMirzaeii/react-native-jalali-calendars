@@ -116,7 +116,7 @@ class Calendar extends Component {
     this.state = {
       currentMonth: props.current ? parseDate(props.current) : XDate(),
     };
-
+    // console.log('currrrr', this.state.currentMonth);
     this.updateMonth = this.updateMonth.bind(this);
     this.pressDay = this.pressDay.bind(this);
     this.longPressDay = this.longPressDay.bind(this);
@@ -124,12 +124,15 @@ class Calendar extends Component {
   }
 
   updateMonth(day, doNotTriggerListeners) {
+    // console.log('this.updateMonth', day);
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
       return;
     }
     this.setState(
       {
-        currentMonth: day.clone(),
+        currentMonth: this.props.jalali
+          ? day.clone().setDate(23) //first day of persian monthes are usually between 19th to 23th of Gregorian month.
+          : day.clone(),
       },
       () => {
         if (!doNotTriggerListeners) {
@@ -169,6 +172,7 @@ class Calendar extends Component {
   }
 
   addMonth = (count) => {
+    // console.log('getMonth', this.state.currentMonth, this.state.currentMonth.getMonth());
     this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
   };
 
@@ -212,7 +216,7 @@ class Calendar extends Component {
     const date = this.props.jalali ? dateutils.pDateDay(day) : day.getDate();
     const dateAsObject = xdateToData(day);
     const accessibilityLabel = this.getAccessibilityLabel(state, day);
-
+    // console.log('renderDay', date);
     return (
       <View style={{flex: 1, alignItems: 'center'}} key={id}>
         <DayComp
@@ -348,7 +352,7 @@ class Calendar extends Component {
     const {currentMonth} = this.state;
     const {firstDay, showSixWeeks, hideExtraDays, enableSwipeMonths, jalali} = this.props;
     const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
-    const days = dateutils.page(currentMonth, firstDay, shouldShowSixWeeks, jalali);
+    const days = dateutils.page(currentMonth, firstDay, jalali, shouldShowSixWeeks);
 
     const weeks = [];
     while (days.length) {
@@ -359,6 +363,7 @@ class Calendar extends Component {
     const current = parseDate(this.props.current);
     if (current) {
       const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
+      // console.log('lastMonthOfDay', lastMonthOfDay);
       if (this.props.displayLoadingIndicator && !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
         indicator = true;
       }
